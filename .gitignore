@@ -44,3 +44,6 @@ Thumbs.db
 
 # Keystore files
 *.jks
+
+# Telegram keys file
+telegram.keys
