@@ -1,0 +1,46 @@
+# Java class files
+*.class
+
+# Generated files
+out/
+bin/
+gen/
+classes/
+gen-external-apklibs/
+
+# Gradle generated files
+.gradle/
+build/
+
+# Signing files
+.signing/
+
+# Log Files
+*.log
+
+# User-specific configurations
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Keystore files
+*.jks
+
+# OS-specific files
+*~
+.directory
+.fuse_hidden*
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.Trash-*
+ehthumbs.db
+Thumbs.db
+*.swp
+*.bak
+
+# Keystore files
+*.jks
