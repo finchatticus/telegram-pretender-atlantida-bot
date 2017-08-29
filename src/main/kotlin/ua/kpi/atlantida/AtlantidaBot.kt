@@ -22,11 +22,10 @@ class AtlantidaBot : TelegramLongPollingBot() {
             if (message.hasText()) {
 
                 //create a object that contains the information to send back the message
-                val sendMessageRequest = SendMessage()
-                sendMessageRequest.chatId = message.chatId.toString() //who should get the message? the sender from which we got the message...
-                sendMessageRequest.text = "you said: ${message.text}"
+                val messageText = "you said: ${message.text}"
+                val sendMessageRequest = SendMessage(message.chatId, messageText)
                 try {
-                    sendMessage(sendMessageRequest) //at the end, so some magic and send the message ;)
+                    sendApiMethod(sendMessageRequest) //at the end, so some magic and send the message ;)
                 } catch (e: TelegramApiException) {
                     //do some error handling
                 }
