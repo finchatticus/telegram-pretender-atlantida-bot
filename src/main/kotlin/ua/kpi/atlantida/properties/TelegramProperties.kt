@@ -9,9 +9,9 @@ class TelegramProperties : MyProperties(FILE_NAME) {
     }
     
     val token: String
-        get() = readProperties().getProperty(PROP_TOKEN) ?: throw RuntimeException("Token is not set in ${FILE_NAME}")
+        get() = readProperties().getProperty(PROP_TOKEN) ?: throw RuntimeException("Token is not set in $FILE_NAME")
 
     val username: String
-        get() = readProperties().getProperty(PROP_USERNAME) ?: throw RuntimeException("Username is not set in ${FILE_NAME}")
+        get() = readProperties().getProperty(PROP_USERNAME) ?: throw RuntimeException("Username is not set in $FILE_NAME")
     
 }
