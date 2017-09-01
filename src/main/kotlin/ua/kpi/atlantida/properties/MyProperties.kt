@@ -17,7 +17,7 @@ open class MyProperties(private val fileName: String) {
         FileOutputStream(fileName).use { output -> props.store(OutputStreamWriter(output, CHARSET_UTF_8), null) }
     }
 
-    protected fun readProperties() = Properties().apply {
+    protected fun readProperties(key: String) = Properties().apply {
         FileInputStream(fileName).use { input -> load(InputStreamReader(input, CHARSET_UTF_8)) }
-    }
+    }.getProperty(key) ?: throw RuntimeException("$key is not set in $fileName")
 }
