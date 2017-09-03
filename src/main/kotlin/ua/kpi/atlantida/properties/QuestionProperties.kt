@@ -17,6 +17,7 @@ class QuestionProperties : MyProperties(FILE_NAME) {
         private val PROP_MARKETING = "marketing"
         private val PROP_LEVELS = "levels"
         private val PROP_SWIMMING_LEVELS = "swimming_levels"
+        private val PROP_FACULTIES = "faculties"
         private val PROP_YES = "yes"
         private val PROP_NO = "no"
     }
@@ -34,6 +35,7 @@ class QuestionProperties : MyProperties(FILE_NAME) {
     val marketing = readProperties(PROP_MARKETING)
     val levels = readProperties(PROP_LEVELS).split(",")
     val swimmingLevels = readProperties(PROP_SWIMMING_LEVELS).split(",")
+    val faculties = readProperties(PROP_FACULTIES).split(",")
     val yes = readProperties(PROP_YES)
     val no = readProperties(PROP_NO)
 }
