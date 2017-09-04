@@ -10,8 +10,7 @@ import ua.kpi.atlantida.questions.QuestionManager
 class AtlantidaBot : TelegramLongPollingBot() {
 
     private val telegramProperties: TelegramProperties = TelegramProperties()
-    private val questionManager = QuestionManager().apply { endCallback = { endQuestion() } }
-    private var isStartCommand = false
+    private val chatHashmap: MutableMap<Long, QuestionManager> = HashMap()
 
     override fun getBotToken() = telegramProperties.token
 
@@ -20,19 +19,27 @@ class AtlantidaBot : TelegramLongPollingBot() {
     override fun onUpdateReceived(update: Update?) {
         if (update?.hasMessage()!!) {
             val message = update.message
+            val chatId = message.chatId
 
             if (message.hasText()) {
 
                 when (message.text) {
                     "/start" -> {
-                        if (!isStartCommand) {
-                            isStartCommand = true
-                            sendReply(message.chatId, questionManager.start())
+                        if (chatHashmap.containsKey(chatId)) {
+                            val questionManager = chatHashmap[chatId]
+                            startQuestionManager(questionManager)
+                        } else {
+                            val questionManager = QuestionManager(chatId).apply { endCallback = { endQuestion(it) } }
+                            chatHashmap[chatId] = questionManager
+                            startQuestionManager(questionManager)
                         }
                     }
                     else -> {
-                        if (isStartCommand) {
-                            sendReply(message.chatId, questionManager.execute(message))
+                        if (chatHashmap.containsKey(chatId)) {
+                            val questionManager = chatHashmap[chatId]
+                            if (questionManager?.isStartCommand!!) {
+                                sendReply(questionManager.execute(message))
+                            }
                         }
                     }
                 }
@@ -40,10 +47,7 @@ class AtlantidaBot : TelegramLongPollingBot() {
         }
     }
 
-    private fun sendReply(chatId: Long, sendMessage: SendMessage) {
-        sendMessage.apply {
-            this.chatId = chatId.toString()
-        }
+    private fun sendReply(sendMessage: SendMessage) {
         try {
             sendApiMethod(sendMessage)
         } catch (e: TelegramApiException) {
@@ -51,8 +55,18 @@ class AtlantidaBot : TelegramLongPollingBot() {
         }
     }
 
-    private fun endQuestion() {
-        isStartCommand = false
+    private fun endQuestion(chatId: Long) {
+        chatHashmap.forEach { t, u -> println("t = $t u = $u") }
+        chatHashmap.remove(chatId)
+    }
+
+    private fun startQuestionManager(questionManager: QuestionManager?) {
+        if (questionManager != null) {
+            if (!questionManager.isStartCommand) {
+                questionManager.isStartCommand = true
+                sendReply(questionManager.start())
+            }
+        }
     }
 
 }

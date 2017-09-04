@@ -4,7 +4,7 @@ import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.objects.Message
 import ua.kpi.atlantida.questions.impl.*
 
-class QuestionManager {
+class QuestionManager(private val chatId: Long) {
 
     private val questionList: List<Question> = listOf(
             NameQuestion(),
@@ -19,24 +19,28 @@ class QuestionManager {
             MarketingQuestion()
     )
     private var currentQuestionIndex = 0
-    var endCallback: (() -> Unit)? = null
+    var endCallback: ((chatId: Long) -> Unit)? = null
+    var isStartCommand = false
 
     fun start(): SendMessage {
         currentQuestionIndex = 0
-        return questionList[currentQuestionIndex].requestQuestion()
+        return questionList[currentQuestionIndex].requestQuestion().apply { chatId = this@QuestionManager.chatId.toString() }
     }
 
     fun execute(input: Message): SendMessage {
         val currentQuestion = questionList[currentQuestionIndex]
-        if (currentQuestionIndex != questionList.size - 1) {
+        return if (currentQuestionIndex != questionList.size - 1) {
             if (currentQuestion.checkAnswer(input)) {
-                return questionList[++currentQuestionIndex].requestQuestion()
+                questionList[++currentQuestionIndex].requestQuestion().apply { chatId = this@QuestionManager.chatId.toString() }
             } else {
-                return currentQuestion.showError()
+                currentQuestion.showError().apply { chatId = this@QuestionManager.chatId.toString() }
             }
         } else {
-            endCallback?.let { it() }
-            return SendMessage().apply { text = "Thanks" }
+            endCallback?.invoke(chatId)
+            SendMessage().apply {
+                chatId = this@QuestionManager.chatId.toString()
+                text = "Thanks"
+            }
         }
     }
 
