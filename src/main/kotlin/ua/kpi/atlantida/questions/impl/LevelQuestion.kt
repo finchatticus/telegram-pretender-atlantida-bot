@@ -5,8 +5,15 @@ import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow
 import ua.kpi.atlantida.questions.Question
+import ua.kpi.atlantida.validator.Validator
+import ua.kpi.atlantida.validator.ValidatorComposer
+import ua.kpi.atlantida.validator.impl.LevelValidator
 
 class LevelQuestion : Question() {
+
+    private val levelValidatorComposer: Validator<String> = ValidatorComposer(LevelValidator(
+            questionProperties.levelError,
+            questionProperties.levels))
 
     override fun requestQuestion() = SendMessage().apply {
         text = questionProperties.level
@@ -15,13 +22,16 @@ class LevelQuestion : Question() {
 
     override fun checkAnswer(message: Message): Boolean {
         return try {
-            message.text.toInt() in 1..6
+            levelValidatorComposer.isValid(message.text)
         } catch (e: NumberFormatException) {
             false
         }
     }
 
-    override fun showError() = SendMessage().apply { text = "Level error" }
+    override fun showError() = SendMessage().apply {
+        text = levelValidatorComposer.getDescription()
+        replyMarkup = getLevelsKeyboard()
+    }
 
     private fun getLevelsKeyboard() = ReplyKeyboardMarkup().apply {
         selective = true
