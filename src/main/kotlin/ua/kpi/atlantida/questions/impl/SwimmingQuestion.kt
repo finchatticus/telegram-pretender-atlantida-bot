@@ -23,7 +23,10 @@ class SwimmingQuestion : Question() {
 
     override fun checkAnswer(message: Message) = swimmingValidatorComposer.isValid(message.text)
 
-    override fun showError() = SendMessage().apply { text = swimmingValidatorComposer.getDescription() }
+    override fun showError() = SendMessage().apply {
+        text = swimmingValidatorComposer.getDescription()
+        replyMarkup = getYesNoKeyboard()
+    }
 
     private fun getYesNoKeyboard() = ReplyKeyboardMarkup().apply {
         selective = true

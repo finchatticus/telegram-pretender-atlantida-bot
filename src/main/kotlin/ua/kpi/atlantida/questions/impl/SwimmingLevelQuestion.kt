@@ -25,7 +25,7 @@ class SwimmingLevelQuestion : Question() {
 
     override fun showError() = SendMessage().apply {
         text = swimmingLevelValidatorComposer.getDescription()
-
+        replyMarkup = getSwimmingLevelsKeyboard()
     }
 
     private fun getSwimmingLevelsKeyboard() = ReplyKeyboardMarkup().apply {
