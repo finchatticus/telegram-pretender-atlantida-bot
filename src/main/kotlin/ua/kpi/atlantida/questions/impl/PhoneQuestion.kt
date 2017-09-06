@@ -27,7 +27,7 @@ class PhoneQuestion(private val pretender: Pretender) : Question() {
         }
 
         if (pretender.phone.isNotBlank()) {
-            return true
+            return phoneValidatorComposer.isValid(pretender.phone)
         }
 
         return false
