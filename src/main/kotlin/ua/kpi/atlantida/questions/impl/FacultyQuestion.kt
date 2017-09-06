@@ -4,13 +4,14 @@ import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow
+import ua.kpi.atlantida.model.Pretender
 import ua.kpi.atlantida.questions.Question
 import ua.kpi.atlantida.validator.Validator
 import ua.kpi.atlantida.validator.ValidatorComposer
 import ua.kpi.atlantida.validator.impl.FacultyValidator
 import java.util.*
 
-class FacultyQuestion : Question() {
+class FacultyQuestion(private val pretender: Pretender) : Question() {
 
     private val facultyValidatorComposer: Validator<String> = ValidatorComposer(FacultyValidator(
             questionProperties.facultyError,
@@ -21,7 +22,13 @@ class FacultyQuestion : Question() {
         replyMarkup = getFacultiesKeyboard()
     }
 
-    override fun checkAnswer(message: Message) = facultyValidatorComposer.isValid(message.text)
+    override fun checkAnswer(message: Message): Boolean {
+        if (facultyValidatorComposer.isValid(message.text)) {
+            pretender.faculty = message.text
+            return true
+        }
+        return false
+    }
 
     override fun showError() = SendMessage().apply {
         text = facultyValidatorComposer.getDescription()

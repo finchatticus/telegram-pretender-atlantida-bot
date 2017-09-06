@@ -4,13 +4,14 @@ import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow
+import ua.kpi.atlantida.model.Pretender
 import ua.kpi.atlantida.questions.Question
 import ua.kpi.atlantida.validator.Validator
 import ua.kpi.atlantida.validator.ValidatorComposer
 import ua.kpi.atlantida.validator.impl.SwimmingValidator
 
 
-class SwimmingQuestion : Question() {
+class SwimmingQuestion(private val pretender: Pretender) : Question() {
 
     private val swimmingValidatorComposer: Validator<String> = ValidatorComposer(SwimmingValidator(
             questionProperties.swimmingError,
@@ -21,7 +22,13 @@ class SwimmingQuestion : Question() {
         replyMarkup = getYesNoKeyboard()
     }
 
-    override fun checkAnswer(message: Message) = swimmingValidatorComposer.isValid(message.text)
+    override fun checkAnswer(message: Message): Boolean {
+        if (swimmingValidatorComposer.isValid(message.text)) {
+            pretender.swimming = message.text
+            return true
+        }
+        return false
+    }
 
     override fun showError() = SendMessage().apply {
         text = swimmingValidatorComposer.getDescription()

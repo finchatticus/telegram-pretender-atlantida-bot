@@ -1,6 +1,7 @@
 package ua.kpi.atlantida
 
-import org.telegram.telegrambots.api.methods.send.SendMessage
+import org.telegram.telegrambots.api.methods.BotApiMethod
+import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.Update
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.exceptions.TelegramApiException
@@ -38,7 +39,7 @@ class AtlantidaBot : TelegramLongPollingBot() {
                         if (chatHashmap.containsKey(chatId)) {
                             val questionManager = chatHashmap[chatId]
                             if (questionManager?.isStartCommand!!) {
-                                sendReply(questionManager.execute(message))
+                                sendReply(questionManager.getResponse(message))
                             }
                         }
                     }
@@ -47,16 +48,15 @@ class AtlantidaBot : TelegramLongPollingBot() {
         }
     }
 
-    private fun sendReply(sendMessage: SendMessage) {
+    private fun sendReply(message: BotApiMethod<Message>) {
         try {
-            sendApiMethod(sendMessage)
+            sendApiMethod(message)
         } catch (e: TelegramApiException) {
             //do some error handling
         }
     }
 
     private fun endQuestion(chatId: Long) {
-        chatHashmap.forEach { t, u -> println("t = $t u = $u") }
         chatHashmap.remove(chatId)
     }
 
@@ -64,7 +64,8 @@ class AtlantidaBot : TelegramLongPollingBot() {
         if (questionManager != null) {
             if (!questionManager.isStartCommand) {
                 questionManager.isStartCommand = true
-                sendReply(questionManager.start())
+                questionManager.start()
+                sendReply(questionManager.requestQuestion())
             }
         }
     }

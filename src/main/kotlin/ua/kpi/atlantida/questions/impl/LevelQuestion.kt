@@ -4,12 +4,13 @@ import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow
+import ua.kpi.atlantida.model.Pretender
 import ua.kpi.atlantida.questions.Question
 import ua.kpi.atlantida.validator.Validator
 import ua.kpi.atlantida.validator.ValidatorComposer
 import ua.kpi.atlantida.validator.impl.LevelValidator
 
-class LevelQuestion : Question() {
+class LevelQuestion(private val pretender: Pretender) : Question() {
 
     private val levelValidatorComposer: Validator<String> = ValidatorComposer(LevelValidator(
             questionProperties.levelError,
@@ -21,11 +22,11 @@ class LevelQuestion : Question() {
     }
 
     override fun checkAnswer(message: Message): Boolean {
-        return try {
-            levelValidatorComposer.isValid(message.text)
-        } catch (e: NumberFormatException) {
-            false
+        if (levelValidatorComposer.isValid(message.text)) {
+            pretender.level = message.text
+            return true
         }
+        return false
     }
 
     override fun showError() = SendMessage().apply {
