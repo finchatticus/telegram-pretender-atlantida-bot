@@ -10,8 +10,11 @@ class MotivationQuestion(private val pretender: Pretender) : Question() {
     override fun requestQuestion() = SendMessage().apply { text = questionProperties.motivation }
 
     override fun checkAnswer(message: Message): Boolean {
-        pretender.motivation = message.text
-        return true
+        if (message.hasText()) {
+            pretender.motivation = message.text
+            return true
+        }
+        return false
     }
 
     override fun showError() = SendMessage().apply { text = "Motivation error" }

@@ -23,7 +23,7 @@ class SwimmingQuestion(private val pretender: Pretender) : Question() {
     }
 
     override fun checkAnswer(message: Message): Boolean {
-        if (swimmingValidatorComposer.isValid(message.text)) {
+        if (message.hasText() && swimmingValidatorComposer.isValid(message.text)) {
             pretender.swimming = message.text
             return true
         }

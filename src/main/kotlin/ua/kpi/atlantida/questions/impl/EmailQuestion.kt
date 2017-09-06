@@ -15,7 +15,7 @@ class EmailQuestion(private val pretender: Pretender) : Question() {
     override fun requestQuestion() = SendMessage().apply { text = questionProperties.email }
 
     override fun checkAnswer(message: Message): Boolean {
-        if (emailValidatorComposer.isValid(message.text)) {
+        if (message.hasText() && emailValidatorComposer.isValid(message.text)) {
             pretender.email = message.text
             return true
         }

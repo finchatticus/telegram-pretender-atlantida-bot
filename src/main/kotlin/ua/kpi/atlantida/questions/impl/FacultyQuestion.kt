@@ -23,7 +23,7 @@ class FacultyQuestion(private val pretender: Pretender) : Question() {
     }
 
     override fun checkAnswer(message: Message): Boolean {
-        if (facultyValidatorComposer.isValid(message.text)) {
+        if (message.hasText() && facultyValidatorComposer.isValid(message.text)) {
             pretender.faculty = message.text
             return true
         }

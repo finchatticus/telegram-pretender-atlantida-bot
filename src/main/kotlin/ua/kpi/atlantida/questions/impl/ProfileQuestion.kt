@@ -10,8 +10,11 @@ class ProfileQuestion(private val pretender: Pretender) : Question() {
     override fun requestQuestion() = SendMessage().apply { text = questionProperties.profile }
 
     override fun checkAnswer(message: Message): Boolean {
-        pretender.profile = message.text
-        return true
+        if (message.hasText()) {
+            pretender.profile = message.text
+            return true
+        }
+        return false
     }
 
     override fun showError() = SendMessage().apply { text = "Profile error" }
