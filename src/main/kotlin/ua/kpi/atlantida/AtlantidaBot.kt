@@ -22,7 +22,7 @@ class AtlantidaBot : TelegramLongPollingBot() {
             val message = update.message
             val chatId = message.chatId
 
-            if (message.hasText()) {
+            if (message.hasText() || message.contact != null) {
 
                 when (message.text) {
                     "/start" -> {

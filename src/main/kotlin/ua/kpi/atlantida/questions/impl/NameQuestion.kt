@@ -10,22 +10,10 @@ class NameQuestion(private val pretender: Pretender) : Question() {
     override fun requestQuestion() = SendMessage().apply { text = questionProperties.name }
 
     override fun checkAnswer(message: Message): Boolean {
-        val lastName = message.contact?.lastName
-        val firstName = message.contact?.firstName
-        val text = message.text
-        if (lastName != null) {
-            pretender.name = lastName
-            return true
-        } else if (firstName != null) {
-            pretender.name += " " + firstName
-        } else if (text != null) {
-            pretender.name = text
-        }
-
-        if (pretender.name.isNotBlank()) {
+        if (message.hasText()) {
+            pretender.name = message.text
             return true
         }
-
         return false
     }
 

@@ -8,25 +8,31 @@ import ua.kpi.atlantida.questions.impl.*
 
 class QuestionManager(private val chatId: Long) {
 
-    private val pretender = Pretender()
-    private val questionList: List<Question> = listOf(
-            NameQuestion(pretender),
-            LevelQuestion(pretender),
-            FacultyQuestion(pretender),
-            SwimmingQuestion(pretender),
-            SwimmingLevelQuestion(pretender),
-            PhoneQuestion(pretender),
-            EmailQuestion(pretender),
-            ProfileQuestion(pretender),
-            MotivationQuestion(pretender),
-            MarketingQuestion(pretender)
-    )
+    companion object {
+        private const val SWIMMING_QUESTION_INDEX = 4 // GOVNOKOD MUST BE CHANGE IF NEW QUESTION ADDED
+    }
+
+    private var pretender = Pretender()
+    private val questionList: MutableList<Question> = mutableListOf()
     private var currentQuestionIndex = 0
     var endCallback: ((chatId: Long) -> Unit)? = null
     var isStartCommand = false
 
     fun start() {
         currentQuestionIndex = 0
+        pretender = Pretender()
+        questionList.addAll(listOf(
+                NameQuestion(pretender),
+                LevelQuestion(pretender),
+                FacultyQuestion(pretender),
+                SwimmingQuestion(pretender),
+                SwimmingLevelQuestion(pretender),
+                PhoneQuestion(pretender),
+                EmailQuestion(pretender),
+                ProfileQuestion(pretender),
+                MotivationQuestion(pretender),
+                MarketingQuestion(pretender)
+        ))
     }
 
     fun requestQuestion(): BotApiMethod<Message> = questionList[currentQuestionIndex].requestQuestion().apply { chatId = this@QuestionManager.chatId.toString() }
@@ -37,6 +43,7 @@ class QuestionManager(private val chatId: Long) {
             if (currentQuestion.checkAnswer(input)) {
                 if (currentQuestionIndex < questionList.size - 1) {
                     currentQuestionIndex++
+                    if (currentQuestionIndex == SWIMMING_QUESTION_INDEX && pretender.swimming == "Ні") currentQuestionIndex++
                     return requestQuestion()
                 } else {
                     return end()
