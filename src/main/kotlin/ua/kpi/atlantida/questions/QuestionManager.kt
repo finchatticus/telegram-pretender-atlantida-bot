@@ -61,7 +61,7 @@ class QuestionManager(private val chatId: Long) {
         endCallback?.invoke(chatId, pretender)
         return SendMessage().apply {
             chatId = this@QuestionManager.chatId.toString()
-            text = "Дякуємо, ваша заявка прийнята. Очікуйте запрошення на ознайомчу лекцію."
+            text = "Дякуємо, Ваша заявка прийнята. Очікуйте запрошення на ознайомчу лекцію."
         }
     }
 
