@@ -1,5 +1,22 @@
-group 'ua.kpi.atlantida'
-version '1.0-SNAPSHOT'
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'kotlin'
+
+mainClassName = "ua.kpi.atlantida.AppKt"
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/kotlin'
+        }
+        resources {
+            srcDir 'src/main/resources'
+        }
+    }
+    //main.java.srcDirs += 'src/main/kotlin'
+    //main.java.resourcesDir
+    //test.java.srcDirs += 'src/main/kotlin'
+}
 
 buildscript {
     ext.kotlin_version = '1.1.4-2'
@@ -11,8 +28,6 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
-
-apply plugin: 'kotlin'
 
 repositories {
     mavenCentral()
@@ -29,4 +44,15 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'ua.kpi.atlantida.AppKt'
+    }
+
+    // This line of code recursively collects and copies all of a project's files
+    // and adds them to the JAR itself. One can extend this task, to skip certain
+    // files or particular types at will
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }

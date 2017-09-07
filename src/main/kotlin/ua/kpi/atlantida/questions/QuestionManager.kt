@@ -57,6 +57,7 @@ class QuestionManager(private val chatId: Long) {
     }
 
     private fun end(): BotApiMethod<Message> {
+        println("petender $pretender")
         endCallback?.invoke(chatId)
         return SendMessage().apply {
             chatId = this@QuestionManager.chatId.toString()
