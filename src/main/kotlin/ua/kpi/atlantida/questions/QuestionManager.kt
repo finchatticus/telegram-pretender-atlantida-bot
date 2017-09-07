@@ -15,7 +15,7 @@ class QuestionManager(private val chatId: Long) {
     private var pretender = Pretender()
     private val questionList: MutableList<Question> = mutableListOf()
     private var currentQuestionIndex = 0
-    var endCallback: ((chatId: Long) -> Unit)? = null
+    var endCallback: ((chatId: Long, pretender: Pretender) -> Unit)? = null
     var isStartCommand = false
 
     fun start() {
@@ -57,11 +57,11 @@ class QuestionManager(private val chatId: Long) {
     }
 
     private fun end(): BotApiMethod<Message> {
-        println("petender $pretender")
-        endCallback?.invoke(chatId)
+        println("end petender $pretender")
+        endCallback?.invoke(chatId, pretender)
         return SendMessage().apply {
             chatId = this@QuestionManager.chatId.toString()
-            text = "Thanks"
+            text = "Дякуємо, ваша заявка прийнята. Очікуйте запрошення на ознайомчу лекцію."
         }
     }
 

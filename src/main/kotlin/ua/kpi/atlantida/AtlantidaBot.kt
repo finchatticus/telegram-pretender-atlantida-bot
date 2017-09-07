@@ -5,6 +5,8 @@ import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.Update
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.exceptions.TelegramApiException
+import ua.kpi.atlantida.db.DataBaseHelper
+import ua.kpi.atlantida.model.Pretender
 import ua.kpi.atlantida.properties.TelegramProperties
 import ua.kpi.atlantida.questions.QuestionManager
 
@@ -12,6 +14,7 @@ class AtlantidaBot : TelegramLongPollingBot() {
 
     private val telegramProperties: TelegramProperties = TelegramProperties()
     private val chatHashmap: MutableMap<Long, QuestionManager> = HashMap()
+    private val databaseHelper = DataBaseHelper()
 
     override fun getBotToken() = telegramProperties.token
 
@@ -21,16 +24,23 @@ class AtlantidaBot : TelegramLongPollingBot() {
         if (update?.hasMessage()!!) {
             val message = update.message
             val chatId = message.chatId
+            val updateId = update.updateId
 
             if (message.hasText() || message.contact != null) {
-
+                println("message chatId = $chatId, updateId = $updateId, text = ${message.text}")
                 when (message.text) {
                     "/start" -> {
                         if (chatHashmap.containsKey(chatId)) {
+                            println("chatHashmap.containsKey(chatId)")
                             val questionManager = chatHashmap[chatId]
-                            startQuestionManager(questionManager)
+                            if (questionManager?.isStartCommand!!) {
+                                sendReply(questionManager.getResponse(message))
+                            } else {
+                                startQuestionManager(questionManager)
+                            }
                         } else {
-                            val questionManager = QuestionManager(chatId).apply { endCallback = { endQuestion(it) } }
+                            println("else")
+                            val questionManager = QuestionManager(chatId).apply { endCallback = { chatId, pretender -> endQuestion(chatId, pretender) } }
                             chatHashmap[chatId] = questionManager
                             startQuestionManager(questionManager)
                         }
@@ -49,19 +59,26 @@ class AtlantidaBot : TelegramLongPollingBot() {
     }
 
     private fun sendReply(message: BotApiMethod<Message>) {
+        println("sendReply message chatId")
         try {
             sendApiMethod(message)
         } catch (e: TelegramApiException) {
-            //do some error handling
+            println("sendReply ex: ${e.printStackTrace()}")
         }
     }
 
-    private fun endQuestion(chatId: Long) {
+    private fun endQuestion(chatId: Long, pretender: Pretender) {
+        println("endQuestion chatId $chatId size = ${chatHashmap.size}")
         chatHashmap.remove(chatId)
+        println("size = ${chatHashmap.size}")
+        databaseHelper.insertPretender(pretender)
     }
 
     private fun startQuestionManager(questionManager: QuestionManager?) {
+        println("startQuestionManager")
         if (questionManager != null) {
+            println("startQuestionManager questionManager != null")
+            println("startQuestionManager questionManager.isStartCommand = ${questionManager.isStartCommand}")
             if (!questionManager.isStartCommand) {
                 questionManager.isStartCommand = true
                 questionManager.start()
