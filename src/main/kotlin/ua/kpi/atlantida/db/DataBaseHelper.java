@@ -5,6 +5,8 @@ import ua.kpi.atlantida.model.Pretender;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by vlad on 07.09.17.
@@ -12,9 +14,10 @@ import java.sql.SQLException;
 public class DataBaseHelper {
 
     private final static String INSERT_PRETENDER =
-            "INSERT INTO pretender(name, level, faculty, swimming, swimming_level, phone, email, profile, motivation, marketing) " +
-                    " VALUES(?,?,?,?,?,?,?,?,?,?)";
+            "INSERT INTO pretender(name, level, faculty, swimming, swimming_level, phone, email, profile, motivation, marketing, timestamp) " +
+                    " VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS");
     private Connection connect;
 
     public DataBaseHelper() throws SQLException {
@@ -36,6 +39,7 @@ public class DataBaseHelper {
             ps.setString(8, pretender.getProfile());
             ps.setString(9, pretender.getMotivation());
             ps.setString(10, pretender.getMarketing());
+            ps.setString(11, sdf.format(new Date()));
             ps.executeUpdate();
             flag = true;
 
