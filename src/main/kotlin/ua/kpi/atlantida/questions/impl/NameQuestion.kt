@@ -10,12 +10,12 @@ import ua.kpi.atlantida.validator.impl.NameValidator
 
 class NameQuestion(private val pretender: Pretender) : Question() {
 
-    private val nameValidatorComposer: Validator<String> = ValidatorComposer(NameValidator(questionProperties.nameError))
+    //private val nameValidatorComposer: Validator<String> = ValidatorComposer(NameValidator(questionProperties.nameError))
 
     override fun requestQuestion() = SendMessage().apply { text = questionProperties.name }
 
     override fun checkAnswer(message: Message): Boolean {
-        if (message.hasText() && nameValidatorComposer.isValid(message.text)) {
+        if (message.hasText()) {
             pretender.name = message.text.trim()
             return true
         }
