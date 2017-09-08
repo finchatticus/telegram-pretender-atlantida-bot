@@ -11,7 +11,7 @@ class MarketingQuestion(private val pretender: Pretender) : Question() {
 
     override fun checkAnswer(message: Message): Boolean {
         if (message.hasText()) {
-            pretender.marketing = message.text
+            pretender.marketing = message.text.trim()
             return true
         }
         return false

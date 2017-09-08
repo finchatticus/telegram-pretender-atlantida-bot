@@ -24,7 +24,7 @@ class SwimmingQuestion(private val pretender: Pretender) : Question() {
 
     override fun checkAnswer(message: Message): Boolean {
         if (message.hasText() && swimmingValidatorComposer.isValid(message.text)) {
-            pretender.swimming = message.text
+            pretender.swimming = message.text.trim()
             return true
         }
         return false

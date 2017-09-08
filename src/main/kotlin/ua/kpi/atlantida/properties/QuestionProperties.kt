@@ -5,6 +5,7 @@ class QuestionProperties : MyProperties(FILE_NAME) {
     private companion object {
         private val FILE_NAME = "questions/ua.properties"
         private val PROP_NAME = "name"
+        private val PROP_NAME_ERROR = "name_error"
         private val PROP_REQUEST_NAME = "request_name"
         private val PROP_LEVEL = "level"
         private val PROP_LEVEL_ERROR = "level_error"
@@ -31,6 +32,7 @@ class QuestionProperties : MyProperties(FILE_NAME) {
     }
 
     val name = readProperties(PROP_NAME)
+    val nameError = readProperties(PROP_NAME_ERROR)
     val requestName = readProperties(PROP_REQUEST_NAME)
     val level = readProperties(PROP_LEVEL)
     val levelError = readProperties(PROP_LEVEL_ERROR)

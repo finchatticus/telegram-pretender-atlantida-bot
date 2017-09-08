@@ -24,7 +24,7 @@ class FacultyQuestion(private val pretender: Pretender) : Question() {
 
     override fun checkAnswer(message: Message): Boolean {
         if (message.hasText() && facultyValidatorComposer.isValid(message.text)) {
-            pretender.faculty = message.text
+            pretender.faculty = message.text.trim()
             return true
         }
         return false
