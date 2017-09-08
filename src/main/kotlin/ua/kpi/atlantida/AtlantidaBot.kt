@@ -71,7 +71,7 @@ class AtlantidaBot : TelegramLongPollingBot() {
         println("endQuestion chatId $chatId size = ${chatHashmap.size}")
         chatHashmap.remove(chatId)
         println("size = ${chatHashmap.size}")
-        Thread({ databaseHelper.insertPretender(pretender) })
+        Thread({ databaseHelper.insertPretender(pretender) }).start()
     }
 
     private fun startQuestionManager(questionManager: QuestionManager?) {
