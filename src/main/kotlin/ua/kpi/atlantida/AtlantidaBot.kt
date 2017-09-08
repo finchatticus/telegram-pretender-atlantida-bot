@@ -1,6 +1,7 @@
 package ua.kpi.atlantida
 
 import org.telegram.telegrambots.api.methods.BotApiMethod
+import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.Update
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
@@ -11,6 +12,10 @@ import ua.kpi.atlantida.properties.TelegramProperties
 import ua.kpi.atlantida.questions.QuestionManager
 
 class AtlantidaBot : TelegramLongPollingBot() {
+
+    private companion object {
+        const val HELLO_TEXT = "Привіт! Я бот для набору в клуб підводного плавання Атлантида. Для подачі заявки в клуб, дай відповіді на всі питання. Якщо все ок, Ви отримаєте повідомлення: \"Дякуємо, Ваша заявка прийнята. Очікуйте запрошення на ознайомчу лекцію.\", значить твоя заявка прийнята. Для перезапуску бота використовуй команду /start. Підписуйся на канал клубу @kpiatlantida, будь-які питання по клубу можеш задати в чатi @atlantidachat. З приводу роботи боту, багів пиши йому @vlad_atlantida."
+    }
 
     private val telegramProperties: TelegramProperties = TelegramProperties()
     private val chatHashmap: MutableMap<Long, QuestionManager> = HashMap()
@@ -35,6 +40,7 @@ class AtlantidaBot : TelegramLongPollingBot() {
                             chatHashmap.remove(chatId)
                         }
                         println("/start")
+                        sendReply(SendMessage(chatId, HELLO_TEXT))
                         val questionManager = QuestionManager(chatId).apply { endCallback = { chatId, pretender -> endQuestion(chatId, pretender) } }
                         chatHashmap[chatId] = questionManager
                         startQuestionManager(questionManager)
