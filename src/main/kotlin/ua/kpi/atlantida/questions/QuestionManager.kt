@@ -12,14 +12,18 @@ class QuestionManager(private val chatId: Long) {
         private const val SWIMMING_QUESTION_INDEX = 4 // GOVNOKOD MUST BE CHANGE IF NEW QUESTION ADDED
     }
 
-    private var pretender = Pretender()
+    var pretender = Pretender()
+        get() = field
     private val questionList: MutableList<Question> = mutableListOf()
     private var currentQuestionIndex = 0
     var endCallback: ((chatId: Long, pretender: Pretender) -> Unit)? = null
     var isStartCommand = false
+    var createdAt = 0L
+        get() = field
 
     fun start() {
         currentQuestionIndex = 0
+        createdAt = System.currentTimeMillis()
         pretender = Pretender()
         questionList.addAll(listOf(
                 NameQuestion(pretender),
