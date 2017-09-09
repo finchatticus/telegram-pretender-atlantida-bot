@@ -1,6 +1,7 @@
 package ua.kpi.atlantida
 
 import org.telegram.telegrambots.api.methods.BotApiMethod
+import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.Update
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
@@ -32,18 +33,12 @@ class AtlantidaBot : TelegramLongPollingBot() {
                     "/start" -> {
                         if (chatHashmap.containsKey(chatId)) {
                             println("chatHashmap.containsKey(chatId)")
-                            val questionManager = chatHashmap[chatId]
-                            if (questionManager?.isStartCommand!!) {
-                                sendReply(questionManager.getResponse(message))
-                            } else {
-                                startQuestionManager(questionManager)
-                            }
-                        } else {
-                            println("else")
-                            val questionManager = QuestionManager(chatId).apply { endCallback = { chatId, pretender -> endQuestion(chatId, pretender) } }
-                            chatHashmap[chatId] = questionManager
-                            startQuestionManager(questionManager)
+                            chatHashmap.remove(chatId)
                         }
+                        println("/start")
+                        val questionManager = QuestionManager(chatId).apply { endCallback = { chatId, pretender -> endQuestion(chatId, pretender) } }
+                        chatHashmap[chatId] = questionManager
+                        startQuestionManager(questionManager)
                     }
                     else -> {
                         if (chatHashmap.containsKey(chatId)) {
@@ -71,7 +66,7 @@ class AtlantidaBot : TelegramLongPollingBot() {
         println("endQuestion chatId $chatId size = ${chatHashmap.size}")
         chatHashmap.remove(chatId)
         println("size = ${chatHashmap.size}")
-        databaseHelper.insertPretender(pretender)
+        Thread({ databaseHelper.insertPretender(pretender) }).start()
     }
 
     private fun startQuestionManager(questionManager: QuestionManager?) {

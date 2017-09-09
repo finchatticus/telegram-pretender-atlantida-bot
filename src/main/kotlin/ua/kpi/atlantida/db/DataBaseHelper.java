@@ -20,14 +20,10 @@ public class DataBaseHelper {
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS");
     private Connection connect;
 
-    public DataBaseHelper() throws SQLException {
-        connect = ConnectorDB.getConnection();
-    }
-
     public boolean insertPretender(Pretender pretender) {
         System.out.println("insert");
         boolean flag = false;
-        final PreparedStatement ps = getPrepearedStatement();
+        final PreparedStatement ps = getPreparedStatement();
         try {
             ps.setString(1, pretender.getName());
             ps.setString(2, pretender.getLevel());
@@ -42,7 +38,6 @@ public class DataBaseHelper {
             ps.setString(11, sdf.format(new Date()));
             ps.executeUpdate();
             flag = true;
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -56,15 +51,19 @@ public class DataBaseHelper {
         if (ps != null) {
             try {
                 ps.close();
+                System.out.println("ps closed");
+                connect.close();
+                System.out.println("connect closed");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private PreparedStatement getPrepearedStatement() {
+    private PreparedStatement getPreparedStatement() {
         PreparedStatement ps = null;
         try {
+            connect = ConnectorDB.getConnection();
             ps = connect.prepareStatement(INSERT_PRETENDER);
         } catch (SQLException e) {
             e.printStackTrace();

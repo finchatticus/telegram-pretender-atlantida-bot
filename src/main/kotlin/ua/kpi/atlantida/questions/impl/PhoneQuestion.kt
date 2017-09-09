@@ -38,7 +38,7 @@ class PhoneQuestion(private val pretender: Pretender) : Question() {
             pretender.phone = phone
             return true
         } else if (message.hasText()) {
-            pretender.phone = message.text
+            pretender.phone = message.text.trim()
         }
 
         if (pretender.phone.isNotBlank()) {

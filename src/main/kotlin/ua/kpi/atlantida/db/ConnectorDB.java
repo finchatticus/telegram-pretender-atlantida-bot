@@ -7,7 +7,7 @@ import java.sql.SQLException;
 /**
  * Created by vlad on 07.09.17.
  */
-public class ConnectorDB {
+class ConnectorDB {
     //TODO: read from properties
     private static final String URL = "jdbc:sqlite:/home/vlad/telegram-bot/pretender.db";
 

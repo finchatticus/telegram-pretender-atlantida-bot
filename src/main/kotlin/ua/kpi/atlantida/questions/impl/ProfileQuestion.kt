@@ -11,7 +11,7 @@ class ProfileQuestion(private val pretender: Pretender) : Question() {
 
     override fun checkAnswer(message: Message): Boolean {
         if (message.hasText()) {
-            pretender.profile = message.text
+            pretender.profile = message.text.trim()
             return true
         }
         return false

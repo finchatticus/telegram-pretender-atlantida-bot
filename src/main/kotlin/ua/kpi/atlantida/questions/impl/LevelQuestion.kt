@@ -23,7 +23,7 @@ class LevelQuestion(private val pretender: Pretender) : Question() {
 
     override fun checkAnswer(message: Message): Boolean {
         if (message.hasText() && levelValidatorComposer.isValid(message.text)) {
-            pretender.level = message.text
+            pretender.level = message.text.trim()
             return true
         }
         return false

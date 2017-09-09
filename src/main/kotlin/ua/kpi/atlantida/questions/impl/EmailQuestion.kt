@@ -16,7 +16,7 @@ class EmailQuestion(private val pretender: Pretender) : Question() {
 
     override fun checkAnswer(message: Message): Boolean {
         if (message.hasText() && emailValidatorComposer.isValid(message.text)) {
-            pretender.email = message.text
+            pretender.email = message.text.trim()
             return true
         }
         return false

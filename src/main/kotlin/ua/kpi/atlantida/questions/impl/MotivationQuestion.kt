@@ -11,7 +11,7 @@ class MotivationQuestion(private val pretender: Pretender) : Question() {
 
     override fun checkAnswer(message: Message): Boolean {
         if (message.hasText()) {
-            pretender.motivation = message.text
+            pretender.motivation = message.text.trim()
             return true
         }
         return false
