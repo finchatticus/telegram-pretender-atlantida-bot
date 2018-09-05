@@ -1,9 +1,9 @@
 package ua.kpi.atlantida.questions.impl
 
-import org.telegram.telegrambots.api.methods.send.SendMessage
-import org.telegram.telegrambots.api.objects.Message
-import org.telegram.telegrambots.api.objects.replykeyboard.ReplyKeyboardMarkup
-import org.telegram.telegrambots.api.objects.replykeyboard.buttons.KeyboardRow
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import org.telegram.telegrambots.meta.api.objects.Message
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow
 import ua.kpi.atlantida.model.Pretender
 import ua.kpi.atlantida.questions.Question
 import ua.kpi.atlantida.validator.Validator

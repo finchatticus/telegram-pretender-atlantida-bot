@@ -1,8 +1,8 @@
 package ua.kpi.atlantida.questions
 
-import org.telegram.telegrambots.api.methods.BotApiMethod
-import org.telegram.telegrambots.api.methods.send.SendMessage
-import org.telegram.telegrambots.api.objects.Message
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import org.telegram.telegrambots.meta.api.objects.Message
 import ua.kpi.atlantida.model.Pretender
 import ua.kpi.atlantida.questions.impl.*
 

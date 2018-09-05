@@ -1,14 +1,15 @@
 package ua.kpi.atlantida.model
 
 data class Pretender(
-        var name: String = "",
-        var level: String = "",
-        var faculty: String = "",
-        var swimming: String = "",
-        var swimmingLevel: String = "",
-        var phone: String = "",
-        var email: String = "",
-        var profile: String = "",
-        var motivation: String = "",
-        var marketing: String = ""
+        var chatId: Long = -1,
+        var name: String? = null,
+        var level: String? = null,
+        var faculty: String? = null,
+        var swimming: String? = null,
+        var swimmingLevel: String? = null,
+        var phone: String? = null,
+        var email: String? = null,
+        var profile: String? = null,
+        var motivation: String? = null,
+        var marketing: String? = null
 )
