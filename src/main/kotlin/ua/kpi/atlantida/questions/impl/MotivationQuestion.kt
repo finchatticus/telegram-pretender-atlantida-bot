@@ -14,7 +14,7 @@ class MotivationQuestion : Question() {
             pretender.motivation = message.text.trim()
             null
         } else {
-            SendMessage(message.chatId, "Motivation error")
+            SendMessage(message.chatId, questionProperties.error)
         }
     }
 

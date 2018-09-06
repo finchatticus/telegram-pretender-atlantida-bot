@@ -24,12 +24,14 @@ class QuestionProperties : MyProperties(FILE_NAME) {
         const val PROP_PROFILE = "profile"
         const val PROP_MOTIVATION = "motivation"
         const val PROP_MARKETING = "marketing"
+        const val PROP_MARKETING_OPTIONS = "marketing_options"
         const val PROP_LEVELS = "levels"
         const val PROP_SWIMMING_LEVELS = "swimming_levels"
         const val PROP_FACULTIES = "faculties"
         const val PROP_YES = "yes"
         const val PROP_NO = "no"
         const val PROP_THANKS = "thanks"
+        const val PROP_ERROR = "error"
     }
 
     val name = readProperties(PROP_NAME)
@@ -52,10 +54,12 @@ class QuestionProperties : MyProperties(FILE_NAME) {
     val profile = readProperties(PROP_PROFILE)
     val motivation = readProperties(PROP_MOTIVATION)
     val marketing = readProperties(PROP_MARKETING)
+    val marketingOptions = readProperties(PROP_MARKETING_OPTIONS).split(",")
     val levels = readProperties(PROP_LEVELS).split(",")
     val swimmingLevels = readProperties(PROP_SWIMMING_LEVELS).split(",")
     val faculties = readProperties(PROP_FACULTIES).split(",")
     val yes = readProperties(PROP_YES)
     val no = readProperties(PROP_NO)
     val thanks = readProperties(PROP_THANKS)
+    val error = readProperties(PROP_ERROR)
 }

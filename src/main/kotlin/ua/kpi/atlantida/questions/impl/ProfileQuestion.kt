@@ -14,7 +14,7 @@ class ProfileQuestion : Question() {
             pretender.profile = message.text.trim()
             null
         } else {
-            SendMessage(message.chatId, "Profile error")
+            SendMessage(message.chatId, questionProperties.error)
         }
     }
 
