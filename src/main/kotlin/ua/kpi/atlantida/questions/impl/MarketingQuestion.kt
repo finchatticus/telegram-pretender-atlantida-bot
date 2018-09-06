@@ -5,17 +5,17 @@ import org.telegram.telegrambots.meta.api.objects.Message
 import ua.kpi.atlantida.model.Pretender
 import ua.kpi.atlantida.questions.Question
 
-class MarketingQuestion(private val pretender: Pretender) : Question() {
+class MarketingQuestion : Question() {
 
-    override fun requestQuestion() = SendMessage().apply { text = questionProperties.marketing }
+    override fun requestQuestion(chatId: Long) = SendMessage(chatId, questionProperties.marketing)
 
-    override fun checkAnswer(message: Message): Boolean {
-        if (message.hasText()) {
+    override fun handleAnswer(message: Message, pretender: Pretender): SendMessage? {
+        return if (message.hasText()) {
             pretender.marketing = message.text.trim()
-            return true
+            null
+        } else {
+            SendMessage(message.chatId, "Marketing error")
         }
-        return false
     }
 
-    override fun showError() = SendMessage().apply { text = "Marketing error" }
 }

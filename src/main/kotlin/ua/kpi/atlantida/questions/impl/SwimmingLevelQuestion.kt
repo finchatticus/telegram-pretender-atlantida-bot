@@ -11,28 +11,25 @@ import ua.kpi.atlantida.validator.ValidatorComposer
 import ua.kpi.atlantida.validator.impl.SwimmingLevelValidator
 import java.util.*
 
-class SwimmingLevelQuestion(private val pretender: Pretender) : Question() {
+class SwimmingLevelQuestion : Question() {
 
     private val swimmingLevelValidatorComposer: Validator<String> = ValidatorComposer(SwimmingLevelValidator(
             questionProperties.swimmingLevelError,
             questionProperties.swimmingLevels))
 
-    override fun requestQuestion() = SendMessage().apply {
-        text = questionProperties.swimmingLevel
+    override fun requestQuestion(chatId: Long) = SendMessage(chatId, questionProperties.swimmingLevel).apply {
         replyMarkup = getSwimmingLevelsKeyboard()
     }
 
-    override fun checkAnswer(message: Message): Boolean {
-        if (message.hasText() && swimmingLevelValidatorComposer.isValid(message.text)) {
+    override fun handleAnswer(message: Message, pretender: Pretender): SendMessage? {
+        return if (message.hasText() && swimmingLevelValidatorComposer.isValid(message.text)) {
             pretender.swimmingLevel = message.text.trim()
-            return true
+            null
+        } else {
+            SendMessage(message.chatId, swimmingLevelValidatorComposer.getDescription()).apply {
+                replyMarkup = getSwimmingLevelsKeyboard()
+            }
         }
-        return false
-    }
-
-    override fun showError() = SendMessage().apply {
-        text = swimmingLevelValidatorComposer.getDescription()
-        replyMarkup = getSwimmingLevelsKeyboard()
     }
 
     private fun getSwimmingLevelsKeyboard() = ReplyKeyboardMarkup().apply {

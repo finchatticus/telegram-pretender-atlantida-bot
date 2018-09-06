@@ -11,28 +11,25 @@ import ua.kpi.atlantida.validator.ValidatorComposer
 import ua.kpi.atlantida.validator.impl.SwimmingValidator
 
 
-class SwimmingQuestion(private val pretender: Pretender) : Question() {
+class SwimmingQuestion : Question() {
 
     private val swimmingValidatorComposer: Validator<String> = ValidatorComposer(SwimmingValidator(
             questionProperties.swimmingError,
             listOf(questionProperties.yes, questionProperties.no)))
 
-    override fun requestQuestion() = SendMessage().apply {
-        text = questionProperties.swimming
+    override fun requestQuestion(chatId: Long) = SendMessage(chatId, questionProperties.swimming).apply {
         replyMarkup = getYesNoKeyboard()
     }
 
-    override fun checkAnswer(message: Message): Boolean {
-        if (message.hasText() && swimmingValidatorComposer.isValid(message.text)) {
+    override fun handleAnswer(message: Message, pretender: Pretender): SendMessage? {
+        return if (message.hasText() && swimmingValidatorComposer.isValid(message.text)) {
             pretender.swimming = message.text.trim()
-            return true
+            null
+        } else {
+            SendMessage(message.chatId, swimmingValidatorComposer.getDescription()).apply {
+                replyMarkup = getYesNoKeyboard()
+            }
         }
-        return false
-    }
-
-    override fun showError() = SendMessage().apply {
-        text = swimmingValidatorComposer.getDescription()
-        replyMarkup = getYesNoKeyboard()
     }
 
     private fun getYesNoKeyboard() = ReplyKeyboardMarkup().apply {

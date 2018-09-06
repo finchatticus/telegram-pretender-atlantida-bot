@@ -11,28 +11,25 @@ import ua.kpi.atlantida.validator.ValidatorComposer
 import ua.kpi.atlantida.validator.impl.FacultyValidator
 import java.util.*
 
-class FacultyQuestion(private val pretender: Pretender) : Question() {
+class FacultyQuestion : Question() {
 
     private val facultyValidatorComposer: Validator<String> = ValidatorComposer(FacultyValidator(
             questionProperties.facultyError,
             questionProperties.faculties))
 
-    override fun requestQuestion() = SendMessage().apply {
-        text = questionProperties.faculty
+    override fun requestQuestion(chatId: Long) = SendMessage(chatId, questionProperties.faculty).apply {
         replyMarkup = getFacultiesKeyboard()
     }
 
-    override fun checkAnswer(message: Message): Boolean {
-        if (message.hasText() && facultyValidatorComposer.isValid(message.text)) {
+    override fun handleAnswer(message: Message, pretender: Pretender): SendMessage? {
+        return if (message.hasText() && facultyValidatorComposer.isValid(message.text)) {
             pretender.faculty = message.text.trim()
-            return true
+            null
+        } else {
+            SendMessage(message.chatId, facultyValidatorComposer.getDescription()).apply {
+                replyMarkup = getFacultiesKeyboard()
+            }
         }
-        return false
-    }
-
-    override fun showError() = SendMessage().apply {
-        text = facultyValidatorComposer.getDescription()
-        replyMarkup = getFacultiesKeyboard()
     }
 
     private fun getFacultiesKeyboard() = ReplyKeyboardMarkup().apply {

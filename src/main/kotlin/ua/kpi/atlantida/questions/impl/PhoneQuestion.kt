@@ -11,12 +11,11 @@ import ua.kpi.atlantida.validator.Validator
 import ua.kpi.atlantida.validator.ValidatorComposer
 import ua.kpi.atlantida.validator.impl.PhoneValidator
 
-class PhoneQuestion(private val pretender: Pretender) : Question() {
+class PhoneQuestion : Question() {
 
     private val phoneValidatorComposer: Validator<String> = ValidatorComposer(PhoneValidator(questionProperties.phoneError))
 
-    override fun requestQuestion() = SendMessage().apply {
-        text = questionProperties.phone
+    override fun requestQuestion(chatId: Long) = SendMessage(chatId, questionProperties.phone).apply {
         replyMarkup = ReplyKeyboardMarkup().apply {
             selective = true
             resizeKeyboard = true
@@ -32,36 +31,31 @@ class PhoneQuestion(private val pretender: Pretender) : Question() {
         }
     }
 
-    override fun checkAnswer(message: Message): Boolean {
+    override fun handleAnswer(message: Message, pretender: Pretender): SendMessage? {
         val phone = message.contact?.phoneNumber
-        if (phone != null) {
+        return if (phone != null) {
             pretender.phone = phone
-            return true
-        } else if (message.hasText()) {
+            null
+        } else if (message.hasText() && phoneValidatorComposer.isValid(message.text)) {
             pretender.phone = message.text.trim()
-        }
-
-        if (pretender.phone!!.isNotBlank()) {
-            return phoneValidatorComposer.isValid(pretender.phone!!)
-        }
-
-        return false
-    }
-
-    override fun showError() = SendMessage().apply {
-        text = phoneValidatorComposer.getDescription()
-        replyMarkup = ReplyKeyboardMarkup().apply {
-            selective = true
-            resizeKeyboard = true
-            oneTimeKeyboard = true
-            keyboard = ArrayList<KeyboardRow>(1).apply {
-                add(KeyboardRow().apply {
-                    add(KeyboardButton().apply {
-                        text = questionProperties.requestPhone
-                        requestContact = true
-                    })
-                })
+            null
+        } else {
+            SendMessage(message.chatId, phoneValidatorComposer.getDescription()).apply {
+                replyMarkup = ReplyKeyboardMarkup().apply {
+                    selective = true
+                    resizeKeyboard = true
+                    oneTimeKeyboard = true
+                    keyboard = ArrayList<KeyboardRow>(1).apply {
+                        add(KeyboardRow().apply {
+                            add(KeyboardButton().apply {
+                                text = questionProperties.requestPhone
+                                requestContact = true
+                            })
+                        })
+                    }
+                }
             }
         }
     }
+
 }

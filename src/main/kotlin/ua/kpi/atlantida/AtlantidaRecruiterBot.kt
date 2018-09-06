@@ -1,13 +1,13 @@
 package ua.kpi.atlantida
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.logging.BotLogger
 import ua.kpi.atlantida.db.DatabaseManager
 import ua.kpi.atlantida.model.Pretender
 import ua.kpi.atlantida.properties.TelegramProperties
+import ua.kpi.atlantida.questions.QuestionFactory
 import ua.kpi.atlantida.repository.PretenderRepository
 import ua.kpi.atlantida.repository.PretenderRepositoryImpl
 import java.io.InvalidObjectException
@@ -21,6 +21,7 @@ class AtlantidaRecruiterBot : TelegramLongPollingBot() {
 
     private val telegramProperties = TelegramProperties()
     private val pretenderRepository: PretenderRepository = PretenderRepositoryImpl(DatabaseManager.getInstance())
+    private val questionFactory = QuestionFactory()
 
     override fun onUpdateReceived(update: Update?) {
         try {
@@ -58,12 +59,29 @@ class AtlantidaRecruiterBot : TelegramLongPollingBot() {
         } else {
             pretenderRepository.update(emptyPretender)
         }
-        execute(SendMessage(message.chatId, "DEBUG start command received ${message.chatId}:${message.text}"))
+        val question = questionFactory.create(emptyPretender)
+        execute(question.requestQuestion(message.chatId))
     }
 
     private fun handleUnknownCommand(message: Message) {
         BotLogger.info(TAG, "unknown command: ${message.chatId}:${message.text}")
-        execute(SendMessage(message.chatId, "DEBUG unknown command received ${message.chatId}:${message.text}"))
+        val pretender = pretenderRepository.get(message.chatId)
+        if (pretender == null) {
+            val newPretender = Pretender(chatId = message.chatId)
+            pretenderRepository.insert(newPretender)
+            val question = questionFactory.create(newPretender)
+            execute(question.requestQuestion(message.chatId))
+        } else {
+            val question = questionFactory.create(pretender)
+            val errorResponse = question.handleAnswer(message, pretender)
+            if (errorResponse == null) {
+                pretenderRepository.update(pretender)
+                val nextQuestion = questionFactory.create(pretender)
+                execute(nextQuestion.requestQuestion(message.chatId))
+            }  else {
+                execute(errorResponse)
+            }
+        }
     }
 
 }

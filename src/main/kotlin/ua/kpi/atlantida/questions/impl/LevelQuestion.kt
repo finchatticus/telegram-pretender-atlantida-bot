@@ -10,28 +10,25 @@ import ua.kpi.atlantida.validator.Validator
 import ua.kpi.atlantida.validator.ValidatorComposer
 import ua.kpi.atlantida.validator.impl.LevelValidator
 
-class LevelQuestion(private val pretender: Pretender) : Question() {
+class LevelQuestion : Question() {
 
     private val levelValidatorComposer: Validator<String> = ValidatorComposer(LevelValidator(
             questionProperties.levelError,
             questionProperties.levels))
 
-    override fun requestQuestion() = SendMessage().apply {
-        text = questionProperties.level
+    override fun requestQuestion(chatId: Long) = SendMessage(chatId, questionProperties.level).apply {
         replyMarkup = getLevelsKeyboard()
     }
 
-    override fun checkAnswer(message: Message): Boolean {
-        if (message.hasText() && levelValidatorComposer.isValid(message.text)) {
+    override fun handleAnswer(message: Message, pretender: Pretender): SendMessage? {
+        return if (message.hasText() && levelValidatorComposer.isValid(message.text)) {
             pretender.level = message.text.trim()
-            return true
+            null
+        } else {
+            SendMessage(message.chatId, levelValidatorComposer.getDescription()).apply {
+                replyMarkup = getLevelsKeyboard()
+            }
         }
-        return false
-    }
-
-    override fun showError() = SendMessage().apply {
-        text = levelValidatorComposer.getDescription()
-        replyMarkup = getLevelsKeyboard()
     }
 
     private fun getLevelsKeyboard() = ReplyKeyboardMarkup().apply {
