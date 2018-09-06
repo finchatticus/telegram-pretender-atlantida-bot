@@ -1,9 +1,5 @@
 package ua.kpi.atlantida.questions
 
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import org.telegram.telegrambots.meta.api.objects.Message
-import org.telegram.telegrambots.meta.logging.BotLogger
 import ua.kpi.atlantida.model.Pretender
 import ua.kpi.atlantida.questions.impl.*
 
@@ -21,7 +17,7 @@ class QuestionFactory {
             pretender.profile == null -> ProfileQuestion()
             pretender.motivation == null -> MotivationQuestion()
             pretender.marketing == null -> MarketingQuestion()
-            else -> EndQuestion()
+            else -> ThanksQuestion()
         }
     }
 

@@ -29,6 +29,7 @@ class QuestionProperties : MyProperties(FILE_NAME) {
         const val PROP_FACULTIES = "faculties"
         const val PROP_YES = "yes"
         const val PROP_NO = "no"
+        const val PROP_THANKS = "thanks"
     }
 
     val name = readProperties(PROP_NAME)
@@ -56,4 +57,5 @@ class QuestionProperties : MyProperties(FILE_NAME) {
     val faculties = readProperties(PROP_FACULTIES).split(",")
     val yes = readProperties(PROP_YES)
     val no = readProperties(PROP_NO)
+    val thanks = readProperties(PROP_THANKS)
 }
