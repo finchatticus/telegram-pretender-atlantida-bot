@@ -36,7 +36,7 @@ class SwimmingLevelQuestion : Question() {
         selective = true
         resizeKeyboard = true
         oneTimeKeyboard = true
-        keyboard = ArrayList<KeyboardRow>(questionProperties.faculties.size).apply {
+        keyboard = ArrayList<KeyboardRow>().apply {
             val swimmingLevels = questionProperties.swimmingLevels
             for (i in 0 until swimmingLevels.size - (swimmingLevels.size % 3) step 3) {
                 add(KeyboardRow().apply {

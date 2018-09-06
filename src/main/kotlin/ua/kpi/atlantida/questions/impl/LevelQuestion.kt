@@ -35,7 +35,7 @@ class LevelQuestion : Question() {
         selective = true
         resizeKeyboard = true
         oneTimeKeyboard = true
-        keyboard = ArrayList<KeyboardRow>(questionProperties.faculties.size).apply {
+        keyboard = ArrayList<KeyboardRow>().apply {
             val levels = questionProperties.levels
             for (i in 0 until levels.size - (levels.size % 3) step 3) {
                 add(KeyboardRow().apply {

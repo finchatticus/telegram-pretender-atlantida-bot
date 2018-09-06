@@ -36,7 +36,7 @@ class FacultyQuestion : Question() {
         selective = true
         resizeKeyboard = true
         oneTimeKeyboard = true
-        keyboard = ArrayList<KeyboardRow>(questionProperties.faculties.size).apply {
+        keyboard = ArrayList<KeyboardRow>().apply {
             val faculties = questionProperties.faculties
             for (i in 0 until faculties.size - (faculties.size % 3) step 3) {
                 add(KeyboardRow().apply {

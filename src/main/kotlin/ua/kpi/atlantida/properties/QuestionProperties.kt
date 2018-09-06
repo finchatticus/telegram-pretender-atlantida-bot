@@ -16,6 +16,7 @@ class QuestionProperties : MyProperties(FILE_NAME) {
         const val PROP_SWIMMING_LEVEL = "swimming_level"
         const val PROP_SWIMMING_LEVEL_ERROR = "swimming_level_error"
         const val PROP_SWIMMING_RATING = "swimming_rating"
+        const val PROP_SWIMMING_RATINGS = "swimming_ratings"
         const val PROP_PHONE = "phone"
         const val PROP_REQUEST_PHONE = "request_phone"
         const val PROP_PHONE_ERROR = "phone_error"
@@ -46,6 +47,7 @@ class QuestionProperties : MyProperties(FILE_NAME) {
     val swimmingLevel = readProperties(PROP_SWIMMING_LEVEL)
     val swimmingLevelError = readProperties(PROP_SWIMMING_LEVEL_ERROR)
     val swimmingRating = readProperties(PROP_SWIMMING_RATING)
+    val swimmingRatings = readProperties(PROP_SWIMMING_RATINGS).split(",")
     val phone = readProperties(PROP_PHONE)
     val requestPhone = readProperties(PROP_REQUEST_PHONE)
     val phoneError = readProperties(PROP_PHONE_ERROR)

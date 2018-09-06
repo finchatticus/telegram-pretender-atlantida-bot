@@ -3,7 +3,10 @@ package ua.kpi.atlantida.db;
 import org.telegram.telegrambots.meta.logging.BotLogger;
 import ua.kpi.atlantida.model.Pretender;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Created by vlad on 07.09.17.
@@ -12,9 +15,9 @@ public class DatabaseManager {
 
     private static final String TAG = DatabaseManager.class.getSimpleName();
     private static final String SELECT_PRETENDER = "SELECT * FROM pretender WHERE chat_id = ?";
-    private static final String INSERT_PRETENDER = "INSERT INTO pretender(chat_id, name, level, faculty, swimming, swimming_level, phone, email, profile, motivation, marketing, timestamp)" +
-            " VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
-    private static final String UPDATE_PRETENDER = "UPDATE pretender SET name=?, level=?, faculty=?, swimming=?, swimming_level=?, phone=?, email=?, profile=?, motivation=?, marketing=?" +
+    private static final String INSERT_PRETENDER = "INSERT INTO pretender(chat_id, name, level, faculty, swimming, swimming_level, my_swimming_level, phone, email, profile, motivation, marketing, timestamp)" +
+            " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    private static final String UPDATE_PRETENDER = "UPDATE pretender SET name=?, level=?, faculty=?, swimming=?, swimming_level=?, my_swimming_level=?, phone=?, email=?, profile=?, motivation=?, marketing=?" +
             " WHERE chat_id = ?";
     private static final String DELETE_PRETENDER = "DELETE pretender WHERE chat_id = ?";
 
@@ -92,6 +95,7 @@ public class DatabaseManager {
                 pretender.setFaculty(rs.getString("faculty"));
                 pretender.setSwimming(rs.getString("swimming"));
                 pretender.setSwimmingLevel(rs.getString("swimming_level"));
+                pretender.setMySwimmingRating(rs.getString("my_swimming_level"));
                 pretender.setPhone(rs.getString("phone"));
                 pretender.setEmail(rs.getString("email"));
                 pretender.setProfile(rs.getString("profile"));
@@ -117,12 +121,13 @@ public class DatabaseManager {
             ps.setString(4, pretender.getFaculty());
             ps.setString(5, pretender.getSwimming());
             ps.setString(6, pretender.getSwimmingLevel());
-            ps.setString(7, pretender.getPhone());
-            ps.setString(8, pretender.getEmail());
-            ps.setString(9, pretender.getProfile());
-            ps.setString(10, pretender.getMotivation());
-            ps.setString(11, pretender.getMarketing());
-            ps.setInt(12, (int) (System.currentTimeMillis() / 1000L));
+            ps.setString(7, pretender.getMySwimmingRating());
+            ps.setString(8, pretender.getPhone());
+            ps.setString(9, pretender.getEmail());
+            ps.setString(10, pretender.getProfile());
+            ps.setString(11, pretender.getMotivation());
+            ps.setString(12, pretender.getMarketing());
+            ps.setInt(13, (int) (System.currentTimeMillis() / 1000L));
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
@@ -140,12 +145,13 @@ public class DatabaseManager {
             ps.setString(3, pretender.getFaculty());
             ps.setString(4, pretender.getSwimming());
             ps.setString(5, pretender.getSwimmingLevel());
-            ps.setString(6, pretender.getPhone());
-            ps.setString(7, pretender.getEmail());
-            ps.setString(8, pretender.getProfile());
-            ps.setString(9, pretender.getMotivation());
-            ps.setString(10, pretender.getMarketing());
-            ps.setLong(11, pretender.getChatId());
+            ps.setString(6, pretender.getMySwimmingRating());
+            ps.setString(7, pretender.getPhone());
+            ps.setString(8, pretender.getEmail());
+            ps.setString(9, pretender.getProfile());
+            ps.setString(10, pretender.getMotivation());
+            ps.setString(11, pretender.getMarketing());
+            ps.setLong(12, pretender.getChatId());
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
