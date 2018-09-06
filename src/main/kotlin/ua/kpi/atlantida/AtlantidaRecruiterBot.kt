@@ -3,6 +3,7 @@ package ua.kpi.atlantida
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
+import org.telegram.telegrambots.meta.api.objects.User
 import org.telegram.telegrambots.meta.logging.BotLogger
 import ua.kpi.atlantida.db.DatabaseManager
 import ua.kpi.atlantida.model.Pretender
@@ -54,6 +55,7 @@ class AtlantidaRecruiterBot : TelegramLongPollingBot() {
         BotLogger.info(TAG, "start command ${message.chatId}:${message.text}")
         val pretender = pretenderRepository.get(message.chatId)
         val emptyPretender = Pretender(chatId = message.chatId)
+        trySetPretenderProfile(message.from, emptyPretender)
         if (pretender == null) {
             pretenderRepository.insert(emptyPretender)
         } else {
@@ -68,6 +70,7 @@ class AtlantidaRecruiterBot : TelegramLongPollingBot() {
         val pretender = pretenderRepository.get(message.chatId)
         if (pretender == null) {
             val newPretender = Pretender(chatId = message.chatId)
+            trySetPretenderProfile(message.from, newPretender)
             pretenderRepository.insert(newPretender)
             val question = questionFactory.create(newPretender)
             execute(question.requestQuestion(message.chatId))
@@ -81,6 +84,12 @@ class AtlantidaRecruiterBot : TelegramLongPollingBot() {
             }  else {
                 execute(errorResponse)
             }
+        }
+    }
+
+    private fun trySetPretenderProfile(user: User, pretender: Pretender) {
+        user.userName?.let {
+            pretender.profile = "@$it"
         }
     }
 
