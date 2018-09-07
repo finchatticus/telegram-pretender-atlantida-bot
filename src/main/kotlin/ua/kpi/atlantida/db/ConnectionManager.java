@@ -13,7 +13,7 @@ class ConnectionManager {
 
     //TODO: read from properties
     private static final String DB_NAME = "pretender.db";
-    private static final String URL = "jdbc:sqlite:/Users/android/Documents/" + DB_NAME;
+    private static final String URL = "jdbc:sqlite:" + DB_NAME;
 
     private static ConnectionManager instance;
 
