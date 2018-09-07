@@ -1,5 +1,7 @@
 package ua.kpi.atlantida
 
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.launch
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
@@ -44,7 +46,7 @@ class AtlantidaRecruiterBot : TelegramLongPollingBot() {
 
     override fun getBotToken() = telegramProperties.token
 
-    private fun handleIncomingMessage(message: Message) {
+    private fun handleIncomingMessage(message: Message) = launch(CommonPool) {
         when (message.text) {
             START_COMMAND -> handleStartCommand(message)
             else -> handleUnknownCommand(message)
