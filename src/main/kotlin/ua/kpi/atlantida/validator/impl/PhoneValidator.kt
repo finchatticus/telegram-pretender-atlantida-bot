@@ -9,9 +9,11 @@ class PhoneValidator(private val error: String) : Validator<String> {
                 "2[98654321]\\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|" +
                 "4[987654310]|3[98643210]|2[70]|7|1)" +
                 "\\W*\\d\\W*\\d\\W*\\d\\W*\\d\\W*\\d\\W*\\d\\W*\\d\\W*\\d\\W*(\\d{1,2})\$"
+        const val PHONE_REGEX_1 = "\\d{10}"
+        const val PHONE_REGEX_2 = "\\d{12}"
     }
 
-    override fun isValid(value: String) = value.matches(Regex(PHONE_REGEX))
+    override fun isValid(value: String) = value.matches(Regex(PHONE_REGEX)) || (value.matches(Regex(PHONE_REGEX_1))) || (value.matches(Regex(PHONE_REGEX_2)))
 
     override fun getDescription() = error
 }
