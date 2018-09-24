@@ -19,7 +19,7 @@ sourceSets {
 }
 
 buildscript {
-    ext.kotlin_version = '1.1.4-2'
+    ext.kotlin_version = '1.2.41'
 
     repositories {
         mavenCentral()
@@ -35,9 +35,10 @@ repositories {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
-    compile "org.telegram:telegrambots:3.2"
-    compile "org.xerial:sqlite-jdbc:3.7.2"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.25.3"
+    compile "org.telegram:telegrambots:4.1"
+    compile "org.xerial:sqlite-jdbc:3.21.0"
 }
 
 compileKotlin {
@@ -56,4 +57,9 @@ jar {
     // and adds them to the JAR itself. One can extend this task, to skip certain
     // files or particular types at will
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
 }

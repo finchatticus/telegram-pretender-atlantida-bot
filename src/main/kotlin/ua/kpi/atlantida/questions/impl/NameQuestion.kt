@@ -1,26 +1,24 @@
 package ua.kpi.atlantida.questions.impl
 
-import org.telegram.telegrambots.api.methods.send.SendMessage
-import org.telegram.telegrambots.api.objects.Message
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import org.telegram.telegrambots.meta.api.objects.Message
 import ua.kpi.atlantida.model.Pretender
 import ua.kpi.atlantida.questions.Question
 import ua.kpi.atlantida.validator.Validator
 import ua.kpi.atlantida.validator.ValidatorComposer
 import ua.kpi.atlantida.validator.impl.NameValidator
 
-class NameQuestion(private val pretender: Pretender) : Question() {
+class NameQuestion : Question() {
 
-    //private val nameValidatorComposer: Validator<String> = ValidatorComposer(NameValidator(questionProperties.nameError))
+    override fun requestQuestion(chatId: Long) = SendMessage(chatId, questionProperties.name)
 
-    override fun requestQuestion() = SendMessage().apply { text = questionProperties.name }
-
-    override fun checkAnswer(message: Message): Boolean {
-        if (message.hasText()) {
+    override fun handleAnswer(message: Message, pretender: Pretender): SendMessage? {
+        return if (message.hasText()) {
             pretender.name = message.text.trim()
-            return true
+            null
+        } else {
+            SendMessage(message.chatId, questionProperties.nameError)
         }
-        return false
     }
 
-    override fun showError() = SendMessage().apply { text = questionProperties.nameError }
 }
