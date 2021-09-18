@@ -5,8 +5,6 @@ data class Pretender(
         var name: String? = null,
         var level: String? = null,
         var faculty: String? = null,
-        var swimming: String? = null,
-        var swimmingLevel: String? = null,
         var mySwimmingRating: String? = null,
         var phone: String? = null,
         var email: String? = null,

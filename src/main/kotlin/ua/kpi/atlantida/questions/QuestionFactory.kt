@@ -10,8 +10,6 @@ class QuestionFactory {
             pretender.name == null -> NameQuestion()
             pretender.level == null -> LevelQuestion()
             pretender.faculty == null -> FacultyQuestion()
-            pretender.swimming == null -> SwimmingQuestion()
-            pretender.swimming?.equals("так", true)!! && pretender.swimmingLevel == null -> SwimmingLevelQuestion()
             pretender.mySwimmingRating == null -> MySwimmingRatingQuestion()
             pretender.phone == null -> PhoneQuestion()
             pretender.email == null -> EmailQuestion()
