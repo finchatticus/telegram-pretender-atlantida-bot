@@ -10,14 +10,14 @@ import ua.kpi.atlantida.questions.Question
  */
 class MySwimmingRatingQuestion : Question() {
 
-    override fun requestQuestion(chatId: Long) = SendMessage(chatId, questionProperties.swimmingRating)
+    override fun requestQuestion(chatId: Long) = SendMessage(chatId.toString(), questionProperties.swimmingRating)
 
     override fun handleAnswer(message: Message, pretender: Pretender): SendMessage? {
         return if (message.hasText()) {
             pretender.mySwimmingRating = message.text.trim()
             null
         } else {
-            SendMessage(message.chatId, questionProperties.error)
+            SendMessage(message.chatId.toString(), questionProperties.error)
         }
     }
 

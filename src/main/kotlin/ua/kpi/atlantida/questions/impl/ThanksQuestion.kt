@@ -11,12 +11,14 @@ import ua.kpi.atlantida.questions.Question
  */
 class ThanksQuestion : Question() {
 
-    override fun requestQuestion(chatId: Long) = SendMessage(chatId, questionProperties.thanks).apply {
-        replyMarkup = ReplyKeyboardRemove()
+    override fun requestQuestion(chatId: Long) = SendMessage(chatId.toString(), questionProperties.thanks).apply {
+        replyMarkup = ReplyKeyboardRemove().apply {
+            removeKeyboard = true
+        }
     }
 
     override fun handleAnswer(message: Message, pretender: Pretender): SendMessage? {
-        return SendMessage(message.chatId, questionProperties.thanks)
+        return SendMessage(message.chatId.toString(), questionProperties.thanks)
     }
 
 }

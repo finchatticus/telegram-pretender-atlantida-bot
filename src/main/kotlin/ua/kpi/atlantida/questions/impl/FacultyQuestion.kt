@@ -17,7 +17,7 @@ class FacultyQuestion : Question() {
             questionProperties.facultyError,
             questionProperties.faculties))
 
-    override fun requestQuestion(chatId: Long) = SendMessage(chatId, questionProperties.faculty).apply {
+    override fun requestQuestion(chatId: Long) = SendMessage(chatId.toString(), questionProperties.faculty).apply {
         replyMarkup = getFacultiesKeyboard()
     }
 
@@ -26,7 +26,7 @@ class FacultyQuestion : Question() {
             pretender.faculty = message.text.trim()
             null
         } else {
-            SendMessage(message.chatId, facultyValidatorComposer.getDescription()).apply {
+            SendMessage(message.chatId.toString(), facultyValidatorComposer.getDescription()).apply {
                 replyMarkup = getFacultiesKeyboard()
             }
         }

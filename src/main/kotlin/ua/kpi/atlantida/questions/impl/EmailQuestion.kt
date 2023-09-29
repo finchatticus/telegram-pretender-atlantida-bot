@@ -13,8 +13,10 @@ class EmailQuestion : Question() {
 
     private val emailValidatorComposer: Validator<String> = ValidatorComposer(EmailValidator(questionProperties.emailError))
 
-    override fun requestQuestion(chatId: Long) = SendMessage(chatId, questionProperties.email).apply {
-        replyMarkup = ReplyKeyboardRemove()
+    override fun requestQuestion(chatId: Long) = SendMessage(chatId.toString(), questionProperties.email).apply {
+        replyMarkup = ReplyKeyboardRemove().apply {
+            removeKeyboard = true
+        }
     }
 
     override fun handleAnswer(message: Message, pretender: Pretender): SendMessage? {
@@ -22,7 +24,7 @@ class EmailQuestion : Question() {
             pretender.email = message.text.trim()
             null
         } else {
-            SendMessage(message.chatId, emailValidatorComposer.getDescription())
+            SendMessage(message.chatId.toString(), emailValidatorComposer.getDescription())
         }
     }
 

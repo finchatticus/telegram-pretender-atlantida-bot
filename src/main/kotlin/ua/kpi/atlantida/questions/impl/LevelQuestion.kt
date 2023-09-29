@@ -16,7 +16,7 @@ class LevelQuestion : Question() {
             questionProperties.levelError,
             questionProperties.levels))
 
-    override fun requestQuestion(chatId: Long) = SendMessage(chatId, questionProperties.level).apply {
+    override fun requestQuestion(chatId: Long) = SendMessage(chatId.toString(), questionProperties.level).apply {
         replyMarkup = getLevelsKeyboard()
     }
 
@@ -25,7 +25,7 @@ class LevelQuestion : Question() {
             pretender.level = message.text.trim()
             null
         } else {
-            SendMessage(message.chatId, levelValidatorComposer.getDescription()).apply {
+            SendMessage(message.chatId.toString(), levelValidatorComposer.getDescription()).apply {
                 replyMarkup = getLevelsKeyboard()
             }
         }

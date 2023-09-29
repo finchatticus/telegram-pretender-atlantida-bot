@@ -1,6 +1,5 @@
 package ua.kpi.atlantida.db;
 
-import org.telegram.telegrambots.meta.logging.BotLogger;
 import ua.kpi.atlantida.model.Pretender;
 
 import java.sql.PreparedStatement;
@@ -27,7 +26,7 @@ public class DatabaseManager {
     private DatabaseManager() {
         connectionManager = ConnectionManager.getInstance();
         final int currentVersion = getDbVersion();
-        BotLogger.info(TAG, "Current db version: " + currentVersion);
+//        BotLogger.info(TAG, "Current db version: " + currentVersion);
         if (currentVersion < CreationStrings.VERSION) {
             recreateTable(currentVersion);
         }
@@ -58,7 +57,7 @@ public class DatabaseManager {
             connectionManager.closeConnection();
             return version;
         } catch (SQLException e) {
-            BotLogger.error(TAG, e);
+//            BotLogger.error(TAG, e);
         }
         return 0;
     }
@@ -69,7 +68,7 @@ public class DatabaseManager {
                 createNewTables();
             }
         } catch (SQLException e) {
-            BotLogger.error(TAG, e);
+//            BotLogger.error(TAG, e);
         }
     }
 
@@ -103,7 +102,7 @@ public class DatabaseManager {
             rs.close();
             ps.close();
         } catch (SQLException e) {
-            BotLogger.error(TAG, e);
+//            BotLogger.error(TAG, e);
         } finally {
             connectionManager.closeConnection();
         }
@@ -127,7 +126,7 @@ public class DatabaseManager {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
-            BotLogger.error(TAG, e);
+//            BotLogger.error(TAG, e);
         } finally {
             connectionManager.closeConnection();
         }
@@ -149,7 +148,7 @@ public class DatabaseManager {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
-            BotLogger.error(TAG, e);
+//            BotLogger.error(TAG, e);
         } finally {
             connectionManager.closeConnection();
         }
@@ -162,7 +161,7 @@ public class DatabaseManager {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
-            BotLogger.error(TAG, e);
+//            BotLogger.error(TAG, e);
         } finally {
             connectionManager.closeConnection();
         }

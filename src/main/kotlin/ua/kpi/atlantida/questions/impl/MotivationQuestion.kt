@@ -7,14 +7,14 @@ import ua.kpi.atlantida.questions.Question
 
 class MotivationQuestion : Question() {
 
-    override fun requestQuestion(chatId: Long) = SendMessage(chatId, questionProperties.motivation)
+    override fun requestQuestion(chatId: Long) = SendMessage(chatId.toString(), questionProperties.motivation)
 
     override fun handleAnswer(message: Message, pretender: Pretender): SendMessage? {
         return if (message.hasText()) {
             pretender.motivation = message.text.trim()
             null
         } else {
-            SendMessage(message.chatId, questionProperties.error)
+            SendMessage(message.chatId.toString(), questionProperties.error)
         }
     }
 

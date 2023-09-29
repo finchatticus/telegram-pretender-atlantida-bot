@@ -1,7 +1,8 @@
 package ua.kpi.atlantida.db;
 
-import org.telegram.telegrambots.meta.logging.BotLogger;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -31,33 +32,33 @@ class ConnectionManager {
     }
 
     synchronized Connection openConnection() {
-        BotLogger.info(TAG, "Open connection START: " + openCounter);
+//        BotLogger.info(TAG, "Open connection START: " + openCounter);
         if (openCounter.incrementAndGet() == 1) {
             try {
                 DriverManager.registerDriver(new org.sqlite.JDBC());
                 currentConnection = DriverManager.getConnection(URL);
                 if (currentConnection != null) {
-                    BotLogger.info(TAG, "Connection != null");
+//                    BotLogger.info(TAG, "Connection != null");
                 }
             } catch (SQLException e) {
-                BotLogger.error(TAG, e);
+//                BotLogger.error(TAG, e);
             }
         }
-        BotLogger.info(TAG, "Open connection END: " + openCounter);
+//        BotLogger.info(TAG, "Open connection END: " + openCounter);
         return currentConnection;
     }
 
     synchronized void closeConnection() {
-        BotLogger.info(TAG, "Close connection START: " + openCounter);
+//        BotLogger.info(TAG, "Close connection START: " + openCounter);
         if (openCounter.decrementAndGet() == 0) {
             // Closing database
             try {
                 currentConnection.close();
             } catch (SQLException e) {
-                BotLogger.error(TAG, e);
+//                BotLogger.error(TAG, e);
             }
         }
-        BotLogger.info(TAG, "Close connection END: " + openCounter);
+//        BotLogger.info(TAG, "Close connection END: " + openCounter);
     }
 
 }

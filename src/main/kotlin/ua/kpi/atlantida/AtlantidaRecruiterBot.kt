@@ -6,7 +6,6 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.api.objects.User
-import org.telegram.telegrambots.meta.logging.BotLogger
 import ua.kpi.atlantida.db.DatabaseManager
 import ua.kpi.atlantida.model.Pretender
 import ua.kpi.atlantida.properties.TelegramProperties
@@ -33,12 +32,14 @@ class AtlantidaRecruiterBot : TelegramLongPollingBot() {
                     try {
                         handleIncomingMessage(it)
                     } catch (e: InvalidObjectException) {
-                        BotLogger.severe(TAG, e)
+                        e.printStackTrace()
+//                        BotLogger.severe(TAG, e)
                     }
                 }
             }
         } catch (e: Exception) {
-            BotLogger.error(TAG, e)
+            e.printStackTrace()
+//            BotLogger.error(TAG, e)
         }
     }
 
@@ -54,7 +55,7 @@ class AtlantidaRecruiterBot : TelegramLongPollingBot() {
     }
 
     private fun handleStartCommand(message: Message) {
-        BotLogger.info(TAG, "start command ${message.chatId}:${message.text}")
+//        BotLogger.info(TAG, "start command ${message.chatId}:${message.text}")
         val pretender = pretenderRepository.get(message.chatId)
         val emptyPretender = Pretender(chatId = message.chatId)
         trySetPretenderProfile(message.from, emptyPretender)
@@ -68,7 +69,7 @@ class AtlantidaRecruiterBot : TelegramLongPollingBot() {
     }
 
     private fun handleUnknownCommand(message: Message) {
-        BotLogger.info(TAG, "unknown command: ${message.chatId}:${message.text}")
+//        BotLogger.info(TAG, "unknown command: ${message.chatId}:${message.text}")
         val pretender = pretenderRepository.get(message.chatId)
         if (pretender == null) {
             val newPretender = Pretender(chatId = message.chatId)

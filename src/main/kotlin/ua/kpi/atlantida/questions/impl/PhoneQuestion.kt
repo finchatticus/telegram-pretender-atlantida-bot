@@ -15,7 +15,7 @@ class PhoneQuestion : Question() {
 
     private val phoneValidatorComposer: Validator<String> = ValidatorComposer(PhoneValidator(questionProperties.phoneError))
 
-    override fun requestQuestion(chatId: Long) = SendMessage(chatId, questionProperties.phone).apply {
+    override fun requestQuestion(chatId: Long) = SendMessage(chatId.toString(), questionProperties.phone).apply {
         replyMarkup = ReplyKeyboardMarkup().apply {
             selective = true
             resizeKeyboard = true
@@ -40,7 +40,7 @@ class PhoneQuestion : Question() {
             pretender.phone = message.text.trim()
             null
         } else {
-            SendMessage(message.chatId, phoneValidatorComposer.getDescription()).apply {
+            SendMessage(message.chatId.toString(), phoneValidatorComposer.getDescription()).apply {
                 replyMarkup = ReplyKeyboardMarkup().apply {
                     selective = true
                     resizeKeyboard = true

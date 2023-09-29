@@ -9,7 +9,7 @@ import ua.kpi.atlantida.questions.Question
 
 class MarketingQuestion : Question() {
 
-    override fun requestQuestion(chatId: Long) = SendMessage(chatId, questionProperties.marketing).apply {
+    override fun requestQuestion(chatId: Long) = SendMessage(chatId.toString(), questionProperties.marketing).apply {
         replyMarkup = getMarketingOptionsKeyboard()
     }
 
@@ -18,7 +18,7 @@ class MarketingQuestion : Question() {
             pretender.marketing = message.text.trim()
             null
         } else {
-            SendMessage(message.chatId, questionProperties.error).apply {
+            SendMessage(message.chatId.toString(), questionProperties.error).apply {
                 replyMarkup = getMarketingOptionsKeyboard()
             }
         }
