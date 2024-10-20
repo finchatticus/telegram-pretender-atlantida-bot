@@ -19,7 +19,6 @@ class AtlantidaRecruiterBot : TelegramLongPollingBot() {
 
     private companion object {
         const val START_COMMAND = "/start"
-        val TAG = AtlantidaRecruiterBot::class.java.simpleName!!
     }
 
     private val telegramProperties = TelegramProperties()
@@ -34,13 +33,11 @@ class AtlantidaRecruiterBot : TelegramLongPollingBot() {
                         handleIncomingMessage(it)
                     } catch (e: InvalidObjectException) {
                         e.printStackTrace()
-//                        BotLogger.severe(TAG, e)
                     }
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
-//            BotLogger.error(TAG, e)
         }
     }
 
@@ -56,7 +53,6 @@ class AtlantidaRecruiterBot : TelegramLongPollingBot() {
     }
 
     private fun handleStartCommand(message: Message) {
-//        BotLogger.info(TAG, "start command ${message.chatId}:${message.text}")
         val pretender = pretenderRepository.get(message.chatId)
         val emptyPretender = Pretender(chatId = message.chatId)
         trySetPretenderProfile(message.from, emptyPretender)
@@ -70,7 +66,6 @@ class AtlantidaRecruiterBot : TelegramLongPollingBot() {
     }
 
     private fun handleUnknownCommand(message: Message) {
-//        BotLogger.info(TAG, "unknown command: ${message.chatId}:${message.text}")
         val pretender = pretenderRepository.get(message.chatId)
         if (pretender == null) {
             val newPretender = Pretender(chatId = message.chatId)
